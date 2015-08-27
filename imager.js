@@ -7,6 +7,7 @@
 		this.uploader = document.querySelector("#uploader");
 		this.tip = document.querySelector(".uploadtip");
 		this.spinner = document.querySelector(".spinner");
+		this.openImg=document.querySelector("#openImg");
 		this.button = {
 			delImg: document.querySelector("#deleteCurImg"),
 			cgWH: document.querySelector("#changeWH")
@@ -36,6 +37,14 @@
 			var ipt = this.textInput;
 			this.uploader.onchange = function() {
 				_this.upload(this, _this);
+			};
+			this.openImg.onclick=function(){
+				if (_this.canvas) {
+					window.open(_this.canvas.toDataURL());
+				}
+				else{
+					alert("请上传图片后再操作！");
+				}
 			};
 			btn.delImg.onclick = function() {
 				if (_this.canvas) {
@@ -81,6 +90,7 @@
 			var _this = this;
 			this.preview.innerHTML = '<canvas id="canvas"></canvas>';
 			this.canvas = document.querySelector("#canvas");
+			this.canvas.innerHTML="你的浏览器不支持canvas，请更换高级浏览器后再使用！";
 			this.ctx = this.canvas.getContext("2d");
 			var img = new Image();
 			img.src = url;
@@ -112,7 +122,7 @@
 			}
 		},
 		handler_changeSize: function() {
-			var _this=this;
+			var _this = this;
 			var img = new Image();
 			img.src = this.dataURL;
 			var w = this.textInput.cgW.value;

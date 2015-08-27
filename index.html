@@ -59,6 +59,17 @@
 	.viewbox{
 		float: left;
 	}
+	#openImg{
+		display: inline-block;
+		color: #666;
+		font-size:14px;
+		height: 40px;
+		line-height: 40px;
+		text-decoration: underline;
+	}
+	#openImg:hover{
+		color: #ff0000;
+	}
 	.filer{
 		position: relative;
 	}
@@ -141,6 +152,47 @@
 		    -webkit-transform: scaleY(1.0);
 		  }
 	}
+	@-webkit-keyframes pulse {
+		0% {
+			-webkit-transform: scale3d(1, 1, 1);
+			transform: scale3d(1, 1, 1);
+		}
+
+		50% {
+			-webkit-transform: scale3d(1.2, 1.2, 1.2);
+			transform: scale3d(1.2, 1.2, 1.2);
+		}
+
+		100% {
+			-webkit-transform: scale3d(1, 1, 1);
+			transform: scale3d(1, 1, 1);
+		}
+
+	}
+
+	@keyframes pulse {
+		0% {
+			-webkit-transform: scale3d(1, 1, 1);
+			transform: scale3d(1, 1, 1);
+		}
+
+		50% {
+			-webkit-transform: scale3d(1.2, 1.2, 1.2);
+			transform: scale3d(1.2, 1.2, 1.2);
+		}
+
+		100% {
+			-webkit-transform: scale3d(1, 1, 1);
+			transform: scale3d(1, 1, 1);
+		}
+
+	}
+
+	.pulse {
+		-webkit-animation: pulse 1s ease-in-out both infinite;
+		animation: pulse 1s ease-in-out both infinite;
+	}
+
 	.optionbar{
 		font-size: 30px;
 		height: 60px;
@@ -177,7 +229,7 @@
 	</header>
 	<article class="wrapper">
 		<section class="option">
-			<h3 class='optionbar'>操作台</h3>
+			<a href="javascript:void(0)" id="openImg">右键没有图片另存为菜单请点击此处获取图片</a>
 			<button id="deleteCurImg">删除当前图片</button>
 			<div id="opt_changeWH" class="opt">
 				<span class="opt_name">改变图片宽高 -></span>
