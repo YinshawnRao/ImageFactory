@@ -15,7 +15,7 @@
 			cgW: document.querySelector("#changeW"),
 			cgH: document.querySelector("#changeH")
 		}
-		
+
 		this.ww = window.innerWidth;
 		this.wh = window.innerHeight;
 		this.maxW = this.ww - 100;
@@ -60,7 +60,7 @@
 					} else if (wVal >= _this.maxW) {
 						alert("宽度不能超过当前窗口高度");
 					} else {
-
+						_this.handler_changeSize();
 					}
 				} else {
 					alert("请上传图片后再操作！");
@@ -87,6 +87,8 @@
 			img.onload = function() {
 				var w = _this.fixSize(img.width, img.height).w;
 				var h = _this.fixSize(img.width, img.height).h;
+				_this.textInput.cgW.value = w;
+				_this.textInput.cgH.value = h;
 				_this.canvas.width = w;
 				_this.canvas.height = h;
 				_this.preview.className = "auto";
@@ -107,6 +109,18 @@
 			return {
 				w: fixW,
 				h: fixH
+			}
+		},
+		handler_changeSize: function() {
+			var _this=this;
+			var img = new Image();
+			img.src = this.dataURL;
+			var w = this.textInput.cgW.value;
+			var h = this.textInput.cgH.value;
+			img.onload = function() {
+				_this.canvas.width = w;
+				_this.canvas.height = h;
+				_this.ctx.drawImage(img, 0, 0, w, h);
 			}
 		}
 	}
