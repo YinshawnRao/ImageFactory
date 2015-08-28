@@ -20,6 +20,7 @@
 		this.tip = $(".uploadtip");
 		this.spinner = $(".spinner");
 		this.openImg = $("#openImg");
+		this.optRot = $("#opt_rotate");
 
 		/*
 		按钮组件
@@ -29,8 +30,7 @@
 			rstImg: $("#resetCurImg"),
 			cgWH: $("#changeWH"),
 			folW: $("#followWW"),
-			folH: $("#followHH"),
-			rot90: $("#rotate90")
+			folH: $("#followHH")
 		};
 
 		/*
@@ -50,6 +50,7 @@
 		this.wh = window.innerHeight;
 		this.maxW = this.ww - 100; //最大宽度
 		this.warns = "请上传图片后再操作！"; //未上传图片提提示语
+		this.angle = 0; //旋转角度
 
 		/*
 		预声明变量
@@ -86,7 +87,6 @@
 			 */
 			this.uploader.onchange = function() {
 				_this.upload(this, _this);
-				console.log(1);
 			};
 
 			/*
@@ -207,27 +207,59 @@
 			};
 
 			/*
-			旋转90度
+			旋转事件委托绑定
 			 */
-			btn.rot90.onclick = function() {
-				if (_this.canvas) {
-					var bol = parseInt(this.dataset.clicked);
-					if (!bol) {
-						this.dataset.clicked = 1;
-						var size = _this.getCurSize(_this.canvas);
-						var w = size.w;
-						var h = size.h;
-						_this.rotateCtx(w, h, 90);
-					} else {
-						var size = _this.getCurSize(_this.canvas);
-						var w = size.w;
-						var h = size.h;
-						_this.rotateCtx(w, h, 0);
-					}
-				} else {
-					alert(_this.warns);
+			this.optRot.onclick = function(e) {
+				var target = e.target || e.srcElement;
+				var clicked = parseInt(target.dataset.clicked);
+				switch (target.id) {
+					case "rotate90":
+						if (_this.canvas) {
+							if (!clicked) {
+								target.dataset.clicked = 1;
+								_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, 90);
+								_this.angle += 90;
+							} else {
+								target.dataset.clicked = 0;
+								_this.rotateCtx(_this.getCurSize(_this.canvas).h, _this.getCurSize(_this.canvas).w, 0);
+							}
+						} else {
+							alert(_this.warns);
+						}
+						break;
+					case "rotate180":
+						if (_this.canvas) {
+							if (!clicked) {
+								target.dataset.clicked = 1;
+								_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, 180);
+								_this.angle += 180;
+							} else {
+								target.dataset.clicked = 0;
+								_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, 0);
+							}
+						} else {
+							alert(_this.warns);
+						}
+						break;
+					case "rotate270":
+						if (_this.canvas) {
+							if (!clicked) {
+								target.dataset.clicked = 1;
+								_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, 270);
+								_this.angle += 270;
+							} else {
+								target.dataset.clicked = 0;
+								_this.rotateCtx(_this.getCurSize(_this.canvas).h, _this.getCurSize(_this.canvas).w, 0);
+							}
+						} else {
+							alert(_this.warns);
+						}
+						break;
+					default:
+						break;
 				}
 			}
+
 		},
 
 		/**
@@ -272,7 +304,6 @@
 				_this.ctx.drawImage(img, 0, 0, w, h);
 				_this.spinner.style.display = "none";
 				_this.uploader.style.zIndex = "-1"; //文件域层级置底
-				console.log(_this.uploader.value);
 			}
 		},
 
@@ -341,25 +372,36 @@
 			var img = new Image();
 			img.src = this.dataURL;
 			img.onload = function() {
-				_this.canvas.width = h;
-				_this.canvas.height = w;
 				switch (deg) {
 					case 0:
-
+						_this.canvas.width = w;
+						_this.canvas.height = h;
+						_this.updateVal(w, h);
 						break;
 					case 90:
+						_this.canvas.width = h;
+						_this.canvas.height = w;
 						_this.ctx.translate(_this.canvas.width, 0); //旋转90度前，画布需沿x轴左移一个单位距离
+						_this.updateVal(h, w);
 						break;
 					case 180:
+						_this.canvas.width = w;
+						_this.canvas.height = h;
+						_this.ctx.translate(_this.canvas.width, _this.canvas.height); //旋转180度前，画布需沿x轴左移一个单位距离，沿y轴下移一个单位距离
+						_this.updateVal(w, h);
 						break;
 					case 270:
+						_this.canvas.width = h;
+						_this.canvas.height = w;
+						_this.ctx.translate(0, _this.canvas.height); //旋转270度前，画布需沿x轴左移一个单位距离
+						_this.updateVal(h, w);
 						break;
 					default:
 						break;
 				}
 				_this.ctx.rotate(deg * Math.PI / 180);
 				_this.ctx.drawImage(img, 0, 0, w, h);
-				_this.updateVal(h, w);
+				console.log(_this.angle);
 			}
 		},
 
@@ -374,6 +416,10 @@
 				w: arr.width,
 				h: arr.height
 			};
+		},
+
+		getCurAngle: function() {
+
 		},
 
 		/**
@@ -391,4 +437,5 @@
 	window["Imager"] = Imager; //提供句柄返回给闭包外
 
 	return new Imager(); //即时执行
+
 })()
