@@ -2,240 +2,38 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>图片处理组件</title>
-	<style>
-	*{
-		margin: 0;
-		padding: 0;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
-	}
-	html,body{
-		height: 100%;
-		min-width: 1280px;
-	}
-	a{
-		text-decoration: none;
-	}
-	ul,ol{
-		list-style: none;
-	}
-	input{
-		outline:0;
-	}
-	button{
-		cursor: pointer;
-	}
-	canvas{
-		vertical-align: top;
-	}
-	.auto{
-		width: auto!important;
-		height: auto!important;
-	}
-	.header{
-		width: 100%;
-		height: 50px;
-		background: #000;
-		color: #fff;
-		line-height: 50px;
-		text-align: center;
-	}
-	.header .copyright{
-		float: right;
-		margin-right: 20px;
-		color:#fff;
-		font-size: 0.8em;
-	}
-	.wrapper{
-		padding: 30px;
-		overflow: hidden;
-	}
-	.viewer{
-		margin-top: 50px;
-		overflow: hidden;
-	}
-	.viewbox{
-		float: left;
-	}
-	#openImg{
-		display: inline-block;
-		color: #666;
-		font-size:14px;
-		height: 40px;
-		line-height: 40px;
-		text-decoration: underline;
-	}
-	#openImg:hover{
-		color: #ff0000;
-	}
-	.filer{
-		position: relative;
-	}
-	#preview{
-		width: 300px;
-		height: 200px;
-		border:3px solid #000;
-		border-radius: 5px;
-		overflow: hidden;
-	}
-	#preview .uploadtip{
-		font-size: 30px;
-		height: 200px;
-		line-height: 200px;
-		text-align: center;
-	}
-	#uploader{
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		left: 0;
-		top: 0;
-		z-index: 99;
-		opacity: 0;
-	}
-	.spinner {
-		 position: absolute;
-		 left: 50%;
-		 top:50%;
-		  width: 60px;
-		  height: 60px;
-		  margin-left: -30px;
-		  margin-top:-30px;
-		  text-align: center;
-		  font-size: 10px;
-		  display: none;
-	}
-	 
-	.spinner > div {
-		  background-color: #000000;
-		  height: 100%;
-		  width: 6px;
-		  display: inline-block;		   
-		  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-		  animation: stretchdelay 1.2s infinite ease-in-out;
-	}
-	 
-	.spinner .rect2 {
-		  -webkit-animation-delay: -1.1s;
-		  animation-delay: -1.1s;
-	}
-	 
-	.spinner .rect3 {
-		  -webkit-animation-delay: -1.0s;
-		  animation-delay: -1.0s;
-	}
-	 
-	.spinner .rect4 {
-		  -webkit-animation-delay: -0.9s;
-		  animation-delay: -0.9s;
-	}
-	 
-	.spinner .rect5 {
-		  -webkit-animation-delay: -0.8s;
-		  animation-delay: -0.8s;
-	}
-	 
-	@-webkit-keyframes stretchdelay {
-		  0%, 40%, 100% { -webkit-transform: scaleY(0.4) } 
-		  20% { -webkit-transform: scaleY(1.0) }
-	}
-	 
-	@keyframes stretchdelay {
-		  0%, 40%, 100% {
-		    transform: scaleY(0.4);
-		    -webkit-transform: scaleY(0.4);
-		  } 
-		   20% {
-		    transform: scaleY(1.0);
-		    -webkit-transform: scaleY(1.0);
-		  }
-	}
-	@-webkit-keyframes pulse {
-		0% {
-			-webkit-transform: scale3d(1, 1, 1);
-			transform: scale3d(1, 1, 1);
-		}
-
-		50% {
-			-webkit-transform: scale3d(1.2, 1.2, 1.2);
-			transform: scale3d(1.2, 1.2, 1.2);
-		}
-
-		100% {
-			-webkit-transform: scale3d(1, 1, 1);
-			transform: scale3d(1, 1, 1);
-		}
-
-	}
-
-	@keyframes pulse {
-		0% {
-			-webkit-transform: scale3d(1, 1, 1);
-			transform: scale3d(1, 1, 1);
-		}
-
-		50% {
-			-webkit-transform: scale3d(1.2, 1.2, 1.2);
-			transform: scale3d(1.2, 1.2, 1.2);
-		}
-
-		100% {
-			-webkit-transform: scale3d(1, 1, 1);
-			transform: scale3d(1, 1, 1);
-		}
-
-	}
-
-	.pulse {
-		-webkit-animation: pulse 1s ease-in-out both infinite;
-		animation: pulse 1s ease-in-out both infinite;
-	}
-
-	.optionbar{
-		font-size: 30px;
-		height: 60px;
-		line-height: 60px;
-	}
-	#deleteCurImg{
-		display: block;
-		height: 30px;
-		padding: 0 10px;
-		margin-bottom: 20px;
-	}
-	.opt{
-		display: inline-block;
-		font-size: 20px;
-		margin: 0 50px 30px 0;
-	}
-	.opt button{
-		width: 50px;
-		height: 30px;		
-		margin-left: 10px;
-	}
-	#opt_changeWH input{
-		width: 80px;
-		height: 30px;
-	}
-	.opt_name{
-		margin-right: 20px;
-	}
-	</style>   
+	<title>图像工厂</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>       
 <body>  
 	<header class="header">
-		<h2>图片处理小工具<a href="http://www.raozongv5.com/blog" class="copyright" target="_blank">created by yinshawn rao</a></h2>
+		<h2>处理完后右键保存图片，请尽量使用chrome或firefox等高逼格浏览器，功能将不断增加完善<a href="http://www.raozongv5.com/blog" class="copyright" target="_blank">created by yinshawn rao</a></h2>
 	</header>
 	<article class="wrapper">
 		<section class="option">
-			<a href="javascript:void(0)" id="openImg">右键没有图片另存为菜单请点击此处获取图片</a>
-			<button id="deleteCurImg">删除当前图片</button>
+			<a href="javascript:void(0)" id="openImg">右键没有图片另存为菜单请点击此处获取图片（图片过大可能会导致浏览器崩溃）</a>
+			<div class="topBtnGroup">
+				<button id="deleteCurImg" class="topBtn">删除图片</button>
+				<button id="resetCurImg" class="topBtn">重置图片</button>
+			</div>
 			<div id="opt_changeWH" class="opt">
-				<span class="opt_name">改变图片宽高 -></span>
+				<span class="opt_name">指定值修改宽高 -></span>
 				宽：<input type="number" id="changeW">
 				高：<input type="number" id="changeH">
 				<button id="changeWH">确定</button>
+			</div>
+			<div id="opt_followWH" class="opt">
+				<span class="opt_name">按比例修改宽高 -></span>
+				宽（高随比例）：<input type="number" id="followW">
+				<button id="followWW">确定</button>&nbsp;&nbsp;
+				高（宽随比例）：<input type="number" id="followH">
+				<button id="followHH">确定</button>
+			</div>
+			<div id="opt_rotate" class="opt">
+				<span class="opt_name">旋转图片 -></span>
+				<button id="rotate90" data-clicked="0">旋转90度</button>
+				<button id="rotate180" data-clicked="0">旋转180度</button>
+				<button id="rotate270" data-clicked="0">旋转270度</button>
 			</div>
 		</section>
 		<section class="viewer">
@@ -257,8 +55,5 @@
 		</section>
 	</article>
 	<script src="imager.js"></script>
-	<script>
-		var imager=new Imager();
-	</script>
 </body>       
 </html>
