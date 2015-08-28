@@ -86,6 +86,7 @@
 			 */
 			this.uploader.onchange = function() {
 				_this.upload(this, _this);
+				console.log(1);
 			};
 
 			/*
@@ -108,7 +109,13 @@
 						_this.preview.className = "";
 						_this.preview.innerHTML = "";
 						_this.preview.appendChild(_this.tip);
+						//重置文件域，防止删除图片后再次上传同一张图片时change事件不触发
+						_this.uploader.outerHTML = _this.uploader.outerHTML;
+						_this.uploader = $("#uploader"); //获取重置的文件域
 						_this.uploader.style.zIndex = "99"; //文件域层级置顶
+						_this.uploader.onchange = function() { //重置文件域绑定事件
+							_this.upload(this, _this);
+						}
 					}
 				} else {
 					alert(_this.warns);
@@ -212,8 +219,10 @@
 						var h = size.h;
 						_this.rotateCtx(w, h, 90);
 					} else {
-						alert(this.dataset.clicked);
-						//旋转0度
+						var size = _this.getCurSize(_this.canvas);
+						var w = size.w;
+						var h = size.h;
+						_this.rotateCtx(w, h, 0);
 					}
 				} else {
 					alert(_this.warns);
@@ -263,6 +272,7 @@
 				_this.ctx.drawImage(img, 0, 0, w, h);
 				_this.spinner.style.display = "none";
 				_this.uploader.style.zIndex = "-1"; //文件域层级置底
+				console.log(_this.uploader.value);
 			}
 		},
 
@@ -334,6 +344,9 @@
 				_this.canvas.width = h;
 				_this.canvas.height = w;
 				switch (deg) {
+					case 0:
+
+						break;
 					case 90:
 						_this.ctx.translate(_this.canvas.width, 0); //旋转90度前，画布需沿x轴左移一个单位距离
 						break;
