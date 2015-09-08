@@ -20,7 +20,6 @@
 		this.tip = $(".uploadtip");
 		this.spinner = $(".spinner");
 		this.openImg = $("#openImg");
-		this.optRot = $("#opt_rotate");
 
 		/*
 		按钮组件
@@ -30,7 +29,9 @@
 			rstImg: $("#resetCurImg"),
 			cgWH: $("#changeWH"),
 			folW: $("#followWW"),
-			folH: $("#followHH")
+			folH: $("#followHH"),
+			rotate: $("#rotate90"),
+			rad: $("#changeRR")
 		};
 
 		/*
@@ -40,7 +41,8 @@
 			cgW: $("#changeW"),
 			cgH: $("#changeH"),
 			flW: $("#followW"),
-			flH: $("#followH")
+			flH: $("#followH"),
+			cgR: $("#changeR")
 		};
 
 		/*
@@ -50,7 +52,7 @@
 		this.wh = window.innerHeight;
 		this.maxW = this.ww - 100; //最大宽度
 		this.warns = "请上传图片后再操作！"; //未上传图片提提示语
-		this.angle = 0; //旋转角度
+		this.rotTimes = 0;
 
 		/*
 		预声明变量
@@ -128,7 +130,7 @@
 			btn.rstImg.onclick = function() {
 				ipt.flW.value = "";
 				ipt.flH.value = "";
-				//还原所有data-clicked
+				_this.rotTimes = 0;
 				if (_this.canvas) {
 					_this.reRender(_this.orgW, _this.orgH);
 					_this.updateVal(_this.orgW, _this.orgH);
@@ -207,57 +209,42 @@
 			};
 
 			/*
-			旋转事件委托绑定
+			旋转事件
 			 */
-			this.optRot.onclick = function(e) {
-				var target = e.target || e.srcElement;
-				var clicked = parseInt(target.dataset.clicked);
-				switch (target.id) {
-					case "rotate90":
-						if (_this.canvas) {
-							if (!clicked) {
-								target.dataset.clicked = 1;
-								_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, 90);
-								_this.angle += 90;
-							} else {
-								target.dataset.clicked = 0;
-								_this.rotateCtx(_this.getCurSize(_this.canvas).h, _this.getCurSize(_this.canvas).w, 0);
-							}
-						} else {
-							alert(_this.warns);
-						}
-						break;
-					case "rotate180":
-						if (_this.canvas) {
-							if (!clicked) {
-								target.dataset.clicked = 1;
-								_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, 180);
-								_this.angle += 180;
-							} else {
-								target.dataset.clicked = 0;
-								_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, 0);
-							}
-						} else {
-							alert(_this.warns);
-						}
-						break;
-					case "rotate270":
-						if (_this.canvas) {
-							if (!clicked) {
-								target.dataset.clicked = 1;
-								_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, 270);
-								_this.angle += 270;
-							} else {
-								target.dataset.clicked = 0;
-								_this.rotateCtx(_this.getCurSize(_this.canvas).h, _this.getCurSize(_this.canvas).w, 0);
-							}
-						} else {
-							alert(_this.warns);
-						}
-						break;
-					default:
-						break;
+
+			btn.rotate.onclick = function() {
+				if (_this.canvas) {
+					_this.rotTimes++;
+					if (_this.rotTimes > 4) {
+						_this.rotTimes = 1;
+					}
+					_this.rotateCtx(_this.getCurSize(_this.canvas).w, _this.getCurSize(_this.canvas).h, _this.rotTimes);
+				} else {
+					alert(_this.warns);
 				}
+			};
+
+			/*
+			添加圆角
+			 */
+			
+			btn.rad.onclick=function(){
+				if (_this.canvas) {
+					var radius=ipt.cgR.value;
+					var base=(_this.canvas.width>_this.canvas.height)?_this.canvas.width:_this.canvas.height;  //取宽和高中大的一方
+					if(radius === ""){
+						alert("参数未填写完整！");
+					}else if(radius<=0){
+						alert("弧度必须为大于0的数字！");
+					}else if(radius>base/2){
+						alert("弧度超过了最大限制！");
+					}else{
+
+					}
+				} else {
+					alert(_this.warns);
+				}
+
 			}
 
 		},
@@ -367,41 +354,39 @@
 		 * 旋转图像
 		 * @return {[type]} [description]
 		 */
-		rotateCtx: function(w, h, deg) {
+		rotateCtx: function(w, h, times) {
 			var _this = this;
+			var deg = times * 90;
 			var img = new Image();
 			img.src = this.dataURL;
 			img.onload = function() {
+				_this.canvas.width = h;
+				_this.canvas.height = w;
 				switch (deg) {
-					case 0:
-						_this.canvas.width = w;
-						_this.canvas.height = h;
-						_this.updateVal(w, h);
-						break;
 					case 90:
-						_this.canvas.width = h;
-						_this.canvas.height = w;
 						_this.ctx.translate(_this.canvas.width, 0); //旋转90度前，画布需沿x轴左移一个单位距离
-						_this.updateVal(h, w);
+						_this.ctx.rotate(deg * Math.PI / 180);
+						_this.ctx.drawImage(img, 0, 0, w, h);
 						break;
 					case 180:
-						_this.canvas.width = w;
-						_this.canvas.height = h;
 						_this.ctx.translate(_this.canvas.width, _this.canvas.height); //旋转180度前，画布需沿x轴左移一个单位距离，沿y轴下移一个单位距离
-						_this.updateVal(w, h);
+						_this.ctx.rotate(deg * Math.PI / 180);
+						_this.ctx.drawImage(img, 0, 0, h, w);
 						break;
 					case 270:
-						_this.canvas.width = h;
-						_this.canvas.height = w;
-						_this.ctx.translate(0, _this.canvas.height); //旋转270度前，画布需沿x轴左移一个单位距离
-						_this.updateVal(h, w);
+						_this.ctx.translate(0, _this.canvas.height); //旋转270度前，画布需沿y轴下移一个单位距离
+						_this.ctx.rotate(deg * Math.PI / 180);
+						_this.ctx.drawImage(img, 0, 0, w, h);
+						break;
+					case 360:
+						//旋转360度，画布无需移动
+						_this.ctx.rotate(deg * Math.PI / 180);
+						_this.ctx.drawImage(img, 0, 0, h, w);
 						break;
 					default:
 						break;
 				}
-				_this.ctx.rotate(deg * Math.PI / 180);
-				_this.ctx.drawImage(img, 0, 0, w, h);
-				console.log(_this.angle);
+				_this.updateVal(h, w);
 			}
 		},
 
@@ -418,10 +403,6 @@
 			};
 		},
 
-		getCurAngle: function() {
-
-		},
-
 		/**
 		 * 更新宽度高度输入框的值
 		 * @param  {[type]} w [description]
@@ -434,8 +415,8 @@
 		}
 	}
 
-	window["Imager"] = Imager; //提供句柄返回给闭包外
+	window["Imager"] = Imager; 
 
-	return new Imager(); //即时执行
+	return new Imager(); 
 
 })()

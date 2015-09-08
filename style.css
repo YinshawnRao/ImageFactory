@@ -59,7 +59,7 @@ canvas {
 }
 
 .wrapper {
-	padding: 30px;
+	padding: 15px;
 	overflow: hidden;
 }
 
@@ -260,12 +260,13 @@ canvas {
 }
 
 .opt_name {
-	margin-right: 20px;
+	margin-right: 10px;
 }
 
-.rotate90{
-	-webkit-transform: rotate(90deg);
-	-ms-transform: rotate(90deg);
-	-moz-transform: rotate(90deg);
-	transform: rotate(90deg);
+#moduleWH .opt{
+	display: inline-block;
+}
+
+#opt_followWH{
+	margin-left: 20px;
 }
