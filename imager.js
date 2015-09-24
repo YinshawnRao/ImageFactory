@@ -229,18 +229,18 @@
 			/*
 			添加圆角
 			 */
-
-			btn.rad.onclick = function() {
+			
+			btn.rad.onclick=function(){
 				if (_this.canvas) {
-					var radius = ipt.cgR.value;
-					var base = (_this.canvas.width > _this.canvas.height) ? _this.canvas.width : _this.canvas.height; //取宽和高中大的一方
-					if (radius === "") {
+					var radius=ipt.cgR.value;
+					var base=(_this.canvas.width>_this.canvas.height)?_this.canvas.width:_this.canvas.height;  //取宽和高中大的一方
+					if(radius === ""){
 						alert("参数未填写完整！");
-					} else if (radius <= 0) {
+					}else if(radius<=0){
 						alert("弧度必须为大于0的数字！");
-					} else if (radius > base / 2) {
+					}else if(radius>base/2){
 						alert("弧度超过了最大限制！");
-					} else {
+					}else{
 
 					}
 				} else {
@@ -417,8 +417,8 @@
 		}
 	}
 
-	window["Imager"] = Imager;
+	window["Imager"] = Imager; 
 
-	return new Imager();
+	return new Imager(); 
 
 })()
